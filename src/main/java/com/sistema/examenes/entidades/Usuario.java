@@ -1,7 +1,11 @@
 package com.sistema.examenes.entidades;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -22,7 +26,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "usuarios")
-public class Usuario {
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,5 +46,17 @@ public class Usuario {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usuario" )
     @JsonIgnore
     private Set<UsuarioRol> usuarioRoles = new HashSet<>();
+
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<Authority> authorities = new HashSet<>();
+        this.usuarioRoles.forEach(usuarioRol -> {
+            authorities.add(new Authority(usuarioRol.getRol().getNombre()));
+        });
+
+        return authorities;
+    }
 
 }
