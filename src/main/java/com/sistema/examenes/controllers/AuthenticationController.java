@@ -1,5 +1,7 @@
 package com.sistema.examenes.controllers;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +21,9 @@ import org.springframework.web.server.ResponseStatusException;
 import com.sistema.examenes.config.JwtUtils;
 import com.sistema.examenes.entidades.JwtRequest;
 import com.sistema.examenes.entidades.JwtResponse;
+import com.sistema.examenes.entidades.Usuario;
 import com.sistema.examenes.servicios.impl.UserDetailsServiceImpl;
+
 
 
 @RestController
@@ -64,5 +69,11 @@ public class AuthenticationController {
             throw new Exception("Credenciales invalidas" + badCredentialsException.getMessage());
         }
     }
+
+    @GetMapping("/current-user")
+    public Usuario getCurrentUser(Principal param) {
+        return (Usuario) this.userDetailsServiceImpl.loadUserByUsername(param.getName());
+    }
     
 }
+    
