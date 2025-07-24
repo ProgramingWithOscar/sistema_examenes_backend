@@ -8,6 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -33,6 +35,8 @@ public class Usuario implements UserDetails {
     private Long id;
 
     private String username;
+    // permite guardar la contraseña, pero no la retorna en las respuestas JSON. Ejemplo al obtener el usuario
+    @JsonProperty(access = Access.WRITE_ONLY)
     private String password;
     private String nombre;
     private String apellido;
